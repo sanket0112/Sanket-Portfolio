@@ -21,6 +21,7 @@ app.use('/api/admin', require('./routes/adminRoutes'));
 app.use('/api/analytics', require('./routes/analyticsRoutes'));
 app.use('/api/resume', require('./routes/resumeRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/chatbot', require('./chatbot/chatbotRoutes'));
 
 // Error Handler Middleware
 app.use(errorHandler);

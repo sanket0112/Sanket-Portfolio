@@ -9,7 +9,7 @@ const SkillsSection = () => {
         },
         {
             title: "AI/ML",
-            skills: ["Machine Learning", "Deep Learning", "Computer Vision", "OpenCV", "NLP", "EDA"]
+            skills: ["Machine Learning", "Deep Learning",  "OpenCV", "NLP", "EDA"]
         },
         {
             title: "Libraries",
@@ -17,7 +17,7 @@ const SkillsSection = () => {
         },
         {
             title: "Tools",
-            skills: ["Git", "GitHub", "VS Code", "Jupyter Notebook", "Google Colab"]
+            skills: ["Git", "GitHub", "VS Code", "Jupyter Notebook", "Google Colab","JIRA"]
         }
     ];
 

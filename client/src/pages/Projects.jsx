@@ -10,17 +10,38 @@ const Projects = () => {
     const defaultProjects = [
         {
             _id: "p1",
-            title: "Shoe Store E-Commerce Website",
-            description: "A fully responsive e-commerce platform for browsing and purchasing shoes.",
-            technologies: ["HTML", "CSS"],
-            githubLink: "#"
+            title: "Sanket-Portfolio",
+            description: "A premium MERN stack portfolio featuring a futuristic glassmorphism UI, complete with an Admin Dashboard, User Management, and JWT Authentication.",
+            technologies: ["MongoDB", "Express", "React", "Node.js"],
+            githubLink: "https://github.com/sanket0112/Sanket-Portfolio"
         },
         {
             _id: "p2",
-            title: "DairyMart E-Commerce Website",
-            description: "An online marketplace for dairy products with cart functionality.",
+            title: "Shoe Store E-Commerce Website",
+            description: "A fully responsive e-commerce platform for browsing and purchasing shoes.",
             technologies: ["HTML", "CSS", "JavaScript"],
-            githubLink: "#"
+            githubLink: "https://github.com/sanket0112/Shoes-Store-"
+        },
+        {
+            _id: "p3",
+            title: "Amazon Clone",
+            description: "A pixel-perfect UI clone of the Amazon e-commerce platform homepage.",
+            technologies: ["HTML", "CSS"],
+            githubLink: "https://github.com/sanket0112/amazon-clone"
+        },
+        {
+            _id: "p4",
+            title: "Tic-Tac-Toe Game",
+            description: "A classic interactive Tic-Tac-Toe game with winning logic and reset functionality.",
+            technologies: ["HTML", "CSS", "JavaScript"],
+            githubLink: "https://github.com/sanket0112/tic-tac-toe"
+        },
+        {
+            _id: "p5",
+            title: "Stone-Paper-Scissors",
+            description: "An interactive rock-paper-scissors game played against a computer opponent.",
+            technologies: ["HTML", "CSS", "JavaScript"],
+            githubLink: "https://github.com/sanket0112/stone-paper-scissors"
         }
     ];
 
