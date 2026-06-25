@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { sendMessage, getMessages, deleteMessage } = require('../controllers/messageController');
-const { protect } = require('../middleware/authMiddleware');
+const { adminProtect } = require('../middleware/authMiddleware');
 const rateLimit = require('express-rate-limit');
 const { check } = require('express-validator');
 
@@ -24,8 +24,8 @@ const validateMessage = [
 
 router.route('/')
     .post(contactLimiter, validateMessage, sendMessage)
-    .get(protect, getMessages);
+    .get(adminProtect, getMessages);
 
-router.route('/:id').delete(protect, deleteMessage);
+router.route('/:id').delete(adminProtect, deleteMessage);
 
 module.exports = router;

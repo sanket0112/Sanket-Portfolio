@@ -31,22 +31,42 @@ const SocialCard = ({ name, url, iconName }) => {
             }}
             whileTap={{ scale: 0.98 }}
         >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <img 
-                    src={`/assets/${iconName}`} 
-                    alt={`${name} logo`} 
-                    style={{ width: '28px', height: '28px', objectFit: 'contain', filter: 'drop-shadow(0 0 5px rgba(255,255,255,0.2))' }} 
-                    onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = 'https://via.placeholder.com/28x28.png?text=Logo';
-                    }}
-                />
-                <span style={{ fontWeight: '600', fontSize: '1.1rem', letterSpacing: '0.5px' }}>{name}</span>
-            </div>
+            {/* Logo on Left */}
+            <img 
+                src={`/assets/${iconName}`} 
+                alt={`${name} logo`} 
+                style={{ width: '28px', height: '28px', objectFit: 'contain', flexShrink: '0', display: 'block', filter: 'drop-shadow(0 0 5px rgba(255,255,255,0.2))' }} 
+                onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = 'https://via.placeholder.com/28x28.png?text=Logo';
+                }}
+            />
+            
+            {/* Name Center-aligned */}
+            <span style={{ 
+                fontWeight: '600', 
+                fontSize: '1.1rem', 
+                letterSpacing: '0.5px', 
+                whiteSpace: 'nowrap', 
+                overflow: 'hidden', 
+                textOverflow: 'ellipsis', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                lineHeight: '1',
+                flex: '1',
+                textAlign: 'center',
+                padding: '0 1rem'
+            }}>
+                {name}
+            </span>
+
+            {/* Link Icon on Right */}
             <motion.div
                 initial={{ opacity: 0.5, x: -5 }}
                 whileHover={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.2 }}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: '0' }}
             >
                 <ExternalLink size={20} color="var(--accent-cyan)" />
             </motion.div>

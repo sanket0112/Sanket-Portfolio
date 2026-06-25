@@ -60,8 +60,22 @@ const AdminDashboard = () => {
         }
     };
 
+    const deleteUser = async (id, userName) => {
+        if (!window.confirm(`Are you sure you want to permanently delete user "${userName}"?`)) {
+            return;
+        }
+        const token = localStorage.getItem('adminToken');
+        try {
+            await axios.delete(`/api/admin/users/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+            setUsers(users.filter(u => u._id !== id));
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     const handleLogout = () => {
         localStorage.removeItem('adminToken');
+        window.dispatchEvent(new Event('authChange'));
         navigate('/');
     };
 
@@ -108,7 +122,7 @@ const AdminDashboard = () => {
                                 <button 
                                     onClick={() => deleteMessage(msg._id)}
                                     style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '1rem' }}
-                                >
+                                 >
                                     Delete
                                 </button>
                                 <h4 style={{ color: 'var(--accent-cyan)' }}>{msg.name}</h4>
@@ -134,7 +148,7 @@ const AdminDashboard = () => {
                                         {u.isBlocked ? 'Blocked' : 'Active'}
                                     </span>
                                 </div>
-                                <div>
+                                <div style={{ display: 'flex', gap: '0.5rem' }}>
                                     <button 
                                         onClick={() => toggleBlockStatus(u._id)}
                                         className="btn"
@@ -145,6 +159,17 @@ const AdminDashboard = () => {
                                         }}
                                     >
                                         {u.isBlocked ? 'Unblock' : 'Block'}
+                                    </button>
+                                    <button 
+                                        onClick={() => deleteUser(u._id, u.name)}
+                                        className="btn"
+                                        style={{ 
+                                            background: 'rgba(239, 68, 68, 0.15)', 
+                                            color: '#ef4444', 
+                                            border: '1px solid rgba(239, 68, 68, 0.4)' 
+                                        }}
+                                    >
+                                        Remove
                                     </button>
                                 </div>
                             </div>

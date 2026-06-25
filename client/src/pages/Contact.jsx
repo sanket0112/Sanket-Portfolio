@@ -92,6 +92,9 @@ const Contact = () => {
                 >
                     {loading ? 'Sending...' : 'Send Message'}
                 </motion.button>
+                <p style={{ fontSize: '0.8rem', color: 'rgba(239, 68, 68, 0.7)', textAlign: 'center', marginTop: '1rem', fontStyle: 'italic' }}>
+                    Currently this service is unavailable because funds are needed to run this section to send email.
+                </p>
             </form>
 
             <div style={{ marginTop: '4rem', textAlign: 'center' }}>

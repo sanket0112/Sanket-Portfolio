@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { Toaster } from 'react-hot-toast';
 import axios from 'axios';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -12,6 +13,7 @@ import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import './styles/auth.css';
 
 function App() {
   useEffect(() => {
@@ -36,6 +38,26 @@ function App() {
 
   return (
     <Router>
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#0f1729',
+            color: '#e2e8f0',
+            border: '1px solid rgba(56, 189, 248, 0.2)',
+            borderRadius: '10px',
+            fontSize: '0.9rem',
+          },
+          success: {
+            iconTheme: { primary: '#22c55e', secondary: '#0f1729' },
+          },
+          error: {
+            iconTheme: { primary: '#ef4444', secondary: '#0f1729' },
+          },
+        }}
+      />
       <ParticleBackground />
       <div className="app-container">
         <Navbar />
@@ -58,4 +80,3 @@ function App() {
 }
 
 export default App;
-

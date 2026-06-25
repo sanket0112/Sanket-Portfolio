@@ -8,11 +8,18 @@ const AdminLogin = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
+    React.useEffect(() => {
+        if (localStorage.getItem('adminToken')) {
+            navigate('/admin/dashboard');
+        }
+    }, [navigate]);
+
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
             const res = await axios.post('/api/admin/login', { email, password });
             localStorage.setItem('adminToken', res.data.token);
+            window.dispatchEvent(new Event('authChange'));
             navigate('/admin/dashboard');
         } catch (err) {
             setError(err.response?.data?.message || 'Login failed');

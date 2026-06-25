@@ -47,16 +47,41 @@ const Home = () => {
                         <a href="/api/resume/download" className="btn btn-primary">
                             Download Resume
                         </a>
-                        <Link to="/contact" className="btn btn-secondary">
-                            Contact Me
-                        </Link>
+                        {localStorage.getItem('adminToken') ? (
+                            <Link to="/admin/dashboard" className="btn btn-secondary" style={{ border: '1px solid var(--accent-purple)', color: 'var(--accent-purple)' }}>
+                                Go to Dashboard
+                            </Link>
+                        ) : (
+                            <Link to="/contact" className="btn btn-secondary">
+                                Contact Me
+                            </Link>
+                        )}
                     </motion.div>
 
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} style={{ marginTop: '2rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
                         <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginRight: '0.5rem' }}>Find me on:</span>
                         {socialLinksArray.map((link, index) => (
-                            <a key={index} href={link.url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block', transition: 'transform 0.2s', padding: '0.5rem', background: 'var(--glass-bg)', borderRadius: '50%', border: '1px solid var(--glass-border)' }} onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'} onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}>
-                                <img src={`/assets/${link.iconName}`} alt={link.name} style={{ width: '20px', height: '20px', objectFit: 'contain' }} onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; }} />
+                            <a 
+                                key={index} 
+                                href={link.url} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                style={{ 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    justifyContent: 'center',
+                                    width: '36px',
+                                    height: '36px',
+                                    transition: 'transform 0.2s', 
+                                    background: 'var(--glass-bg)', 
+                                    borderRadius: '50%', 
+                                    border: '1px solid var(--glass-border)',
+                                    boxSizing: 'border-box'
+                                }} 
+                                onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'} 
+                                onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                            >
+                                <img src={`/assets/${link.iconName}`} alt={link.name} style={{ width: '18px', height: '18px', objectFit: 'contain' }} onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; }} />
                             </a>
                         ))}
                     </motion.div>
@@ -89,11 +114,17 @@ const Home = () => {
                 </motion.div>
             </section>
 
-            {/* Social Cards Section */}
-            <section style={{ marginTop: '2rem' }}>
-                <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+            {/* Social Links Section */}
+            <section style={{ marginTop: '5rem' }}>
+                <div style={{ 
+                    display: 'grid', 
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+                    gap: '1.5rem', 
+                    justifyContent: 'center',
+                    width: '100%'
+                }}>
                     {socialLinksArray.map((link, index) => (
-                        <motion.div key={index} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 + (index * 0.1) }} style={{ flex: '1', minWidth: '200px' }}>
+                        <motion.div key={index} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 + (index * 0.1) }}>
                             <SocialCard name={link.name} url={link.url} iconName={link.iconName} />
                         </motion.div>
                     ))}

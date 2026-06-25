@@ -1,80 +1,135 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaEye, FaEyeSlash, FaTimes } from 'react-icons/fa';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const Login = () => {
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+        if (error) setError('');
     };
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        setError('');
+        setLoading(true);
         try {
             const res = await axios.post('/api/users/login', formData);
             
             if (res.data.isAdmin) {
                 localStorage.setItem('adminToken', res.data.token);
+                toast.success('Welcome back, Admin!');
                 navigate('/admin/dashboard');
             } else {
                 localStorage.setItem('userToken', res.data.token);
                 localStorage.setItem('userName', res.data.name);
                 window.dispatchEvent(new Event('authChange'));
+                toast.success(res.data.message || 'Welcome back!');
                 navigate('/');
             }
         } catch (err) {
-            setError(err.response?.data?.message || 'Login failed');
+            const msg = err.response?.data?.message || 'Login failed. Please try again.';
+            setError(msg);
+            toast.error(msg);
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
-        <motion.div 
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
-            style={{ maxWidth: '400px', margin: '5rem auto' }}
+        <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="auth-page-wrapper"
         >
-            <div className="glass-panel">
-                <h2 style={{ textAlign: 'center', marginBottom: '1rem' }} className="text-gradient">Welcome Back</h2>
-                <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginBottom: '2rem' }}>Log in to your account</p>
-                
-                {error && <p style={{ color: '#ef4444', marginBottom: '1rem', textAlign: 'center', background: 'rgba(239, 68, 68, 0.1)', padding: '0.5rem', borderRadius: '4px' }}>{error}</p>}
-                
-                <form onSubmit={handleLogin}>
-                    <div className="form-group">
-                        <label className="form-label">Email</label>
-                        <input type="email" name="email" className="form-control" value={formData.email} onChange={handleChange} required />
+            <div className="auth-card">
+                {/* Header */}
+                <div className="auth-header">
+                    <div className="auth-icon-circle">
+                        <span style={{ fontSize: '1.5rem' }}>👋</span>
                     </div>
-                    <div className="form-group">
-                        <label className="form-label">Password</label>
-                        <div style={{ position: 'relative' }}>
-                            <input 
-                                type={showPassword ? "text" : "password"} 
-                                name="password" 
-                                className="form-control" 
-                                value={formData.password} 
-                                onChange={handleChange} 
-                                required 
-                                style={{ paddingRight: '2.5rem' }}
+                    <h2 className="auth-title text-gradient">Welcome Back</h2>
+                    <p className="auth-subtitle">Log in to your account</p>
+                </div>
+
+                {/* Error Banner */}
+                <AnimatePresence>
+                    {error && (
+                        <motion.div
+                            className="auth-error-banner"
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                        >
+                            <FaTimes style={{ flexShrink: 0, marginTop: '2px' }} />
+                            <span>{error}</span>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+                
+                <form onSubmit={handleLogin} noValidate>
+                    <div className="auth-field">
+                        <label className="auth-label">Email Address</label>
+                        <input
+                            id="login-email"
+                            type="email"
+                            name="email"
+                            className="auth-input"
+                            placeholder="you@example.com"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                            autoComplete="email"
+                            autoFocus
+                        />
+                    </div>
+                    <div className="auth-field">
+                        <label className="auth-label">Password</label>
+                        <div className="auth-input-wrapper">
+                            <input
+                                id="login-password"
+                                type={showPassword ? "text" : "password"}
+                                name="password"
+                                className="auth-input"
+                                placeholder="Enter your password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                required
+                                autoComplete="current-password"
                             />
-                            <button 
-                                type="button" 
+                            <button
+                                type="button"
+                                className="auth-eye-btn"
                                 onClick={() => setShowPassword(!showPassword)}
-                                style={{ position: 'absolute', right: '0.8rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}
+                                aria-label="Toggle password visibility"
                             >
                                 {showPassword ? <FaEyeSlash /> : <FaEye />}
                             </button>
                         </div>
                     </div>
-                    <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '1rem' }}>Log In</button>
+
+                    <button
+                        id="login-submit"
+                        type="submit"
+                        className="auth-btn"
+                        disabled={loading}
+                    >
+                        {loading ? <span className="auth-spinner" /> : 'Log In'}
+                    </button>
                 </form>
 
-                <p style={{ textAlign: 'center', marginTop: '1.5rem', color: 'var(--text-secondary)' }}>
-                    Don't have an account? <Link to="/signup" style={{ color: 'var(--accent-cyan)' }}>Sign Up</Link>
+                <p className="auth-redirect-text">
+                    Don't have an account?{' '}
+                    <Link to="/signup" className="auth-link">Sign Up</Link>
                 </p>
             </div>
         </motion.div>

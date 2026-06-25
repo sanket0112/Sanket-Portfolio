@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 
+// ── Transporter ────────────────────────────────────────────────────────────────
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -8,8 +9,12 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+// ── Contact Form Emails ────────────────────────────────────────────────────────
+
+/**
+ * Send notification email to portfolio owner + auto-reply to visitor.
+ */
 const sendContactEmails = async (name, email, subject, message) => {
-    // 1. Send notification to the portfolio owner
     const ownerMailOptions = {
         from: process.env.EMAIL_USER,
         to: 'ps213patelsanket@gmail.com',
@@ -17,7 +22,6 @@ const sendContactEmails = async (name, email, subject, message) => {
         text: `New Portfolio Contact Request\n\nName: ${name}\n\nEmail: ${email}\n\nSubject: ${subject}\n\nMessage:\n${message}`
     };
 
-    // 2. Send auto-reply to the visitor
     const visitorMailOptions = {
         from: process.env.EMAIL_USER,
         to: email,
@@ -35,6 +39,4 @@ const sendContactEmails = async (name, email, subject, message) => {
     }
 };
 
-module.exports = {
-    sendContactEmails
-};
+module.exports = { sendContactEmails };

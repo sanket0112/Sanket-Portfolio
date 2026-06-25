@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { loginAdmin, getUsers, toggleBlockUser } = require('../controllers/adminController');
-const { protect } = require('../middleware/authMiddleware');
+const { loginAdmin, getUsers, toggleBlockUser, deleteUser } = require('../controllers/adminController');
+const { adminProtect } = require('../middleware/authMiddleware');
 
 router.post('/login', loginAdmin);
-router.get('/users', protect, getUsers);
-router.put('/users/:id/block', protect, toggleBlockUser);
+router.get('/users', adminProtect, getUsers);
+router.route('/users/:id')
+    .put(adminProtect, toggleBlockUser)
+    .delete(adminProtect, deleteUser);
 
 module.exports = router;
