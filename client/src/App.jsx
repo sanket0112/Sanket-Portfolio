@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
-import axios from 'axios';
+import api from './services/api';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ParticleBackground from './components/ParticleBackground';
@@ -20,7 +20,7 @@ function App() {
     const trackVisit = async () => {
       try {
         const isNewVisitor = !localStorage.getItem('visited_before');
-        await axios.post('/api/analytics/track', { isNewVisitor });
+        await api.post('/analytics/track', { isNewVisitor });
         if (isNewVisitor) {
           localStorage.setItem('visited_before', 'true');
         }

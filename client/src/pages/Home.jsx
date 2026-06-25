@@ -44,7 +44,7 @@ const Home = () => {
                         A passionate AI/ML Engineer focused on Machine Learning, Data Science, Computer Vision, and Full Stack Development. Currently pursuing a Diploma in Information Technology while building real-world intelligent systems, know as ZeroKai.                    </motion.p>
                     
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
-                        <a href="/api/resume/download" className="btn btn-primary">
+                        <a href={`${import.meta.env.VITE_API_BASE_URL || '/api'}/resume/download`} className="btn btn-primary">
                             Download Resume
                         </a>
                         {localStorage.getItem('adminToken') ? (

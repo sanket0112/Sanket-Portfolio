@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaEye, FaEyeSlash, FaCheck, FaTimes } from 'react-icons/fa';
-import axios from 'axios';
+import api from '../services/api';
 import toast from 'react-hot-toast';
 
 // ── Password strength checker ──────────────────────────────────────────────────
@@ -52,7 +52,7 @@ const Signup = () => {
 
         setLoading(true);
         try {
-            const res = await axios.post('/api/users/register', formData);
+            const res = await api.post('/users/register', formData);
             toast.success(res.data.message || 'Registration successful! Please log in.');
             navigate('/login');
         } catch (err) {

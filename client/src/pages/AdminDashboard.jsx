@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../services/api';
 
 const AdminDashboard = () => {
     const [stats, setStats] = useState(null);
@@ -20,13 +20,13 @@ const AdminDashboard = () => {
 
         const fetchData = async () => {
             try {
-                const statRes = await axios.get('/api/analytics', config);
+                const statRes = await api.get('/analytics', config);
                 setStats(statRes.data);
 
-                const msgRes = await axios.get('/api/messages', config);
+                const msgRes = await api.get('/messages', config);
                 setMessages(msgRes.data);
                 
-                const userRes = await axios.get('/api/admin/users', config);
+                const userRes = await api.get('/admin/users', config);
                 setUsers(userRes.data);
             } catch (err) {
                 console.error(err);
@@ -43,7 +43,7 @@ const AdminDashboard = () => {
     const deleteMessage = async (id) => {
         const token = localStorage.getItem('adminToken');
         try {
-            await axios.delete(`/api/messages/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+            await api.delete(`/messages/${id}`, { headers: { Authorization: `Bearer ${token}` } });
             setMessages(messages.filter(msg => msg._id !== id));
         } catch (err) {
             console.error(err);
@@ -53,7 +53,7 @@ const AdminDashboard = () => {
     const toggleBlockStatus = async (id) => {
         const token = localStorage.getItem('adminToken');
         try {
-            await axios.put(`/api/admin/users/${id}/block`, {}, { headers: { Authorization: `Bearer ${token}` } });
+            await api.put(`/admin/users/${id}/block`, {}, { headers: { Authorization: `Bearer ${token}` } });
             setUsers(users.map(u => u._id === id ? { ...u, isBlocked: !u.isBlocked } : u));
         } catch (err) {
             console.error(err);
@@ -66,7 +66,7 @@ const AdminDashboard = () => {
         }
         const token = localStorage.getItem('adminToken');
         try {
-            await axios.delete(`/api/admin/users/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+            await api.delete(`/admin/users/${id}`, { headers: { Authorization: `Bearer ${token}` } });
             setUsers(users.filter(u => u._id !== id));
         } catch (err) {
             console.error(err);

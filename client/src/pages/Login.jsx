@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaEye, FaEyeSlash, FaTimes } from 'react-icons/fa';
-import axios from 'axios';
+import api from '../services/api';
 import toast from 'react-hot-toast';
 
 const Login = () => {
@@ -22,7 +22,7 @@ const Login = () => {
         setError('');
         setLoading(true);
         try {
-            const res = await axios.post('/api/users/login', formData);
+            const res = await api.post('/users/login', formData);
             
             if (res.data.isAdmin) {
                 localStorage.setItem('adminToken', res.data.token);
