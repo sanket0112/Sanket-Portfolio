@@ -37,12 +37,25 @@ const allowedOrigins = [
 
 app.use(cors({
     origin: (origin, callback) => {
-        // Allow requests with no origin (e.g. Postman, mobile apps) in development
-        if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV === 'development') {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
+        // Allow requests with no origin (e.g. Postman, mobile apps)
+        if (!origin) return callback(null, true);
+        
+        // Allow configured origins
+        if (allowedOrigins.includes(origin)) {
+            return callback(null, true);
         }
+
+        // Allow Vercel preview deployments dynamically
+        if (origin.endsWith('.vercel.app')) {
+            return callback(null, true);
+        }
+
+        // Allow all in development
+        if (process.env.NODE_ENV === 'development') {
+            return callback(null, true);
+        }
+
+        callback(new Error('Not allowed by CORS'));
     },
     credentials: true
 }));
