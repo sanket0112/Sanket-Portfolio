@@ -62,6 +62,7 @@ const verifyGeminiConnection = async () => {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey || apiKey === 'your_gemini_api_key_here') {
         console.log('Gemini API Key Loaded: NO');
+        console.warn('\x1b[33m%s\x1b[0m', 'WARNING: GEMINI_API_KEY is missing or set to placeholder. The chatbot will fall back to local RAG.');
         isGeminiKeyValid = false;
         geminiAuthErrorMessage = 'Gemini API key is missing or set to placeholder.';
         return;

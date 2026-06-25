@@ -19,8 +19,7 @@ const rateLimit = require('express-rate-limit');
 const connectDB = require('./config/db');
 const { errorHandler } = require('./middleware/errorHandler');
 
-// ── Connect to Database ────────────────────────────────────────────────────────
-connectDB();
+// ── Connect to Database (deferred until server startup) ──────────────────────────
 
 const app = express();
 
@@ -79,6 +78,27 @@ app.use(errorHandler);
 
 // ── Start Server ───────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-});
+connectDB()
+    .then(() => {
+        const server = app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+
+        // Handle port conflicts (EADDRINUSE)
+        server.on('error', (error) => {
+            if (error.code === 'EADDRINUSE') {
+                console.error('\x1b[31m%s\x1b[0m', `CRITICAL ERROR: Port ${PORT} is already in use.`);
+                console.error('\x1b[33m%s\x1b[0m', `Another instance of this server is already running on port ${PORT}, or another process is using it.`);
+                console.error('\x1b[33m%s\x1b[0m', 'Please stop the other process and restart the server.');
+                process.exit(1);
+            } else {
+                console.error('\x1b[31m%s\x1b[0m', `Server Error: ${error.message}`);
+                process.exit(1);
+            }
+        });
+    })
+    .catch((error) => {
+        console.error('\x1b[31m%s\x1b[0m', 'CRITICAL ERROR: Database connection failed. Server not started.');
+        console.error('\x1b[31m%s\x1b[0m', `Error: ${error.message}`);
+        process.exit(1);
+    });
